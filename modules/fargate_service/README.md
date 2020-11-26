@@ -7,7 +7,7 @@ Sample:
 
 ```hcl-terraform
 module "fargate_service" {
-  source = "github.com/mulecode/terraform.git//module/fargate_service"
+  source = "github.com/roioteromorales/tf-modules.git//modules/fargate_service"
   service_name = var.service_name
   region = var.region
   repository = var.repository

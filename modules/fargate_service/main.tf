@@ -19,7 +19,7 @@ locals {
     },
     "portMappings": [
       {
-        "containerPort": ${var.port}
+        "containerPort": ${var.container_port}
       }
     ]
   }
@@ -47,7 +47,7 @@ resource "aws_ecs_task_definition" "main" {
 resource "aws_ecs_service" "main" {
   name = var.service_name
   cluster = var.cluster_id
-  task_definition = "${aws_ecs_task_definition.main.family}:${aws_ecs_task_definition.main.revision}"
+  task_definition = aws_ecs_task_definition.main.arn
   desired_count = var.min_instances
   launch_type = "FARGATE"
 
@@ -62,7 +62,7 @@ resource "aws_ecs_service" "main" {
   load_balancer {
     target_group_arn = aws_lb_target_group.main.arn
     container_name = var.service_name
-    container_port = var.port
+    container_port = var.container_port
   }
 
   lifecycle {
@@ -126,8 +126,8 @@ resource "aws_security_group" "main" {
 
   ingress {
     description = "Permit all from outside"
-    from_port = var.port
-    to_port = var.port
+    from_port = var.container_port
+    to_port = var.container_port
     protocol = "tcp"
     cidr_blocks = [
       "0.0.0.0/0"
@@ -151,23 +151,24 @@ resource "aws_security_group" "main" {
 
 resource "aws_lb_target_group" "main" {
   name = var.service_name
-  port = 80
+  port = var.container_port
   protocol = "HTTP"
   target_type = "ip"
   vpc_id = var.vpc_id
   health_check {
     enabled = true
     interval = 120
-    port = 80
+    port = var.container_port
     path = var.health_check_url_path
   }
 }
 
 resource "aws_lb_listener" "main" {
   load_balancer_arn = var.lb_arn
-  port = "80"
-  protocol = "HTTP"
-//  ssl_policy = "ELBSecurityPolicy-2016-08"
+  port = "443"
+  protocol = "HTTPS"
+  ssl_policy = "ELBSecurityPolicy-2016-08"
+  certificate_arn = var.acm_certificate_arn
 
   default_action {
     type = "forward"

@@ -7,6 +7,7 @@ variable "repository" {}
 variable "ecs_execution_role_arn" {}
 variable "lb_arn" {}
 variable "lb_path" {}
+variable "acm_certificate_arn" {}
 variable "health_check_url_path" {}
 
 variable "assign_public_ip" {
@@ -22,8 +23,8 @@ variable "memory" {
   default = 512
 }
 
-variable "port" {
-  default = 80
+variable "container_port" {
+  default = 8080
 }
 
 variable "min_instances" {

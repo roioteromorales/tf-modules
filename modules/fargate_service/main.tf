@@ -175,21 +175,21 @@ resource "aws_lb_listener" "main" {
   }
 }
 
-//resource "aws_lb_listener" "redirect_http_to_https" {
-//  load_balancer_arn = var.lb_arn
-//  port = "80"
-//  protocol = "HTTP"
-//
-//  default_action {
-//    type = "redirect"
-//
-//    redirect {
-//      port = "443"
-//      protocol = "HTTPS"
-//      status_code = "HTTP_301"
-//    }
-//  }
-//}
+resource "aws_lb_listener" "redirect_http_to_https" {
+  load_balancer_arn = var.lb_arn
+  port = "80"
+  protocol = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port = "443"
+      protocol = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
 
 resource "aws_lb_listener_rule" "main" {
   listener_arn = aws_lb_listener.main.arn
@@ -210,25 +210,25 @@ resource "aws_lb_listener_rule" "main" {
 
 }
 
-//resource "aws_lb_listener_rule" "redirect_http_to_https" {
-//  listener_arn = aws_lb_listener.redirect_http_to_https.arn
-//
-//  action {
-//    type = "redirect"
-//
-//    redirect {
-//      port = "443"
-//      protocol = "HTTPS"
-//      status_code = "HTTP_301"
-//    }
-//  }
-//
-//  condition {
-//    http_header {
-//      http_header_name = "X-Forwarded-For"
-//      values = [
-//        var.lb_path
-//      ]
-//    }
-//  }
-//}
+resource "aws_lb_listener_rule" "redirect_http_to_https" {
+  listener_arn = aws_lb_listener.redirect_http_to_https.arn
+
+  action {
+    type = "redirect"
+
+    redirect {
+      port = "443"
+      protocol = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+
+  condition {
+    http_header {
+      http_header_name = "X-Forwarded-For"
+      values = [
+        var.lb_path
+      ]
+    }
+  }
+}

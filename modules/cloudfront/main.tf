@@ -70,9 +70,7 @@ resource "aws_cloudfront_distribution" "main" {
   default_root_object = var.default_root_object
 
   # If using route53 aliases for DNS we need to declare it here too, otherwise we'll get 403s.
-  aliases = [
-    local.sub_domain
-  ]
+  aliases = [local.sub_domain]
 
   origin {
     domain_name = aws_s3_bucket.main.bucket_regional_domain_name

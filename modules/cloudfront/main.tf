@@ -60,6 +60,7 @@ resource "aws_cloudfront_origin_access_identity" "main" {
 
 resource "aws_cloudfront_distribution" "main" {
   depends_on = [
+    aws_cloudfront_origin_access_identity.main,
     aws_s3_bucket.main]
 
   enabled = true
@@ -71,7 +72,8 @@ resource "aws_cloudfront_distribution" "main" {
   viewer_protocol_policy = "redirect-to-https"
 
   # If using route53 aliases for DNS we need to declare it here too, otherwise we'll get 403s.
-  aliases = [local.sub_domain]
+  aliases = [
+    local.sub_domain]
 
   origin {
     domain_name = aws_s3_bucket.main.bucket_regional_domain_name

@@ -2,12 +2,17 @@ provider "aws" {
   region = var.region
 }
 
+data "aws_ecr_image" "ecr_image" {
+  repository_name = var.service_name
+  image_tag = var.repository_version
+}
+
 locals {
   container_definitions = <<EOF
 [
   {
     "name": "${var.service_name}",
-    "image": "${var.repository}",
+    "image": "${var.repository_name}:${var.repository_version}@${data.aws_ecr_image.ecr_image.image_digest}",
     "environment": ${var.environment_variables},
     "logConfiguration": {
         "logDriver": "awslogs",

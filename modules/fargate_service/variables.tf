@@ -3,7 +3,8 @@ variable "subnets" {}
 variable "cluster_id" {}
 variable "service_name" {}
 variable "region" {}
-variable "repository" {}
+variable "repository_name" {}
+variable "repository_version" {}
 variable "ecs_execution_role_arn" {}
 variable "lb_arn" {}
 variable "lb_path" {}

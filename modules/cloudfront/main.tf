@@ -69,7 +69,6 @@ resource "aws_cloudfront_distribution" "main" {
 
   price_class = var.price_class
   default_root_object = var.default_root_object
-  viewer_protocol_policy = "redirect-to-https"
 
   # If using route53 aliases for DNS we need to declare it here too, otherwise we'll get 403s.
   aliases = [
@@ -92,7 +91,7 @@ resource "aws_cloudfront_distribution" "main" {
   }
 
   default_cache_behavior {
-    viewer_protocol_policy = "allow-all"
+    viewer_protocol_policy = "redirect-to-https"
     min_ttl = 0
     default_ttl = 3600
     max_ttl = 86400

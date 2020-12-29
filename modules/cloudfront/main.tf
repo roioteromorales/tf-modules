@@ -129,6 +129,9 @@ data "aws_route53_zone" "selected" {
 }
 
 resource "aws_route53_record" "main" {
+  depends_on = [
+    aws_cloudfront_distribution.main
+  ]
   zone_id = data.aws_route53_zone.selected.zone_id
   name = local.sub_domain
   type = "A"

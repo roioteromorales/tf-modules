@@ -24,13 +24,6 @@ resource "aws_db_subnet_group" "db" {
   name = "${var.db_identifier}-db-subnet"
   description = "RDS ${var.db_identifier} subnet group"
   subnet_ids = var.subnets
-
-  lifecycle {
-    ignore_changes = [
-      "name",
-      "description",
-    ]
-  }
 }
 
 resource "aws_db_instance" "db" {
@@ -55,13 +48,6 @@ resource "aws_db_instance" "db" {
   db_subnet_group_name = aws_db_subnet_group.db.name
   multi_az = false
   delete_automated_backups = true
-
-  lifecycle {
-    ignore_changes = [
-      "username",
-      "password",
-    ]
-  }
 
   tags = {
     BACKUP_ENABLED = "true"

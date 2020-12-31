@@ -31,9 +31,7 @@ resource "aws_security_group" "db" {
 resource "aws_db_subnet_group" "db" {
   name = "${var.db_identifier}-db-subnet"
   description = "RDS ${var.db_identifier} subnet group"
-  subnet_ids = [
-    var.subnets
-  ]
+  subnet_ids = var.subnets
 
   lifecycle {
     ignore_changes = [

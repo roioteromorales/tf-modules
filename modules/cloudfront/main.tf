@@ -123,7 +123,7 @@ resource "aws_cloudfront_distribution" "main" {
   viewer_certificate {
     cloudfront_default_certificate = true
     acm_certificate_arn = var.acm_certificate_arn
-    ssl_support_method = "vip"
+    ssl_support_method = "sni-only"
   }
 }
 

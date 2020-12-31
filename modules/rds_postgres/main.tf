@@ -18,12 +18,6 @@ resource "aws_security_group" "db" {
       "0.0.0.0/0"]
   }
 
-  lifecycle {
-    ignore_changes = [
-      "name",
-      "description",
-    ]
-  }
 }
 
 resource "aws_db_subnet_group" "db" {

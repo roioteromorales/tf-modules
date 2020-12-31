@@ -52,21 +52,20 @@ resource "aws_db_instance" "db" {
   password = random_password.password.result
   backup_retention_period = var.backup_retention_period
   deletion_protection = true
-  storage_encrypted = true
+  storage_encrypted = false
   skip_final_snapshot = false
   final_snapshot_identifier = "${var.db_identifier}-SNAPSHOT"
   vpc_security_group_ids = [
     aws_security_group.db.id
   ]
   db_subnet_group_name = aws_db_subnet_group.db.name
-  multi_az = true
-  delete_automated_backups = false
+  multi_az = false
+  delete_automated_backups = true
 
   lifecycle {
     ignore_changes = [
       "username",
       "password",
-      "multi_az",
     ]
   }
 

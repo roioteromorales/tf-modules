@@ -52,8 +52,8 @@ resource "aws_db_instance" "db" {
   engine = "postgres"
   engine_version = var.engine_version
   name = "postgres"
-  username = "master"
-  password = "CHANGEME"
+  username = random_password.username.result
+  password = random_password.password.result
   backup_retention_period = var.backup_retention_period
   deletion_protection = true
   storage_encrypted = true
@@ -79,6 +79,17 @@ resource "aws_db_instance" "db" {
   }
 }
 
+resource "random_password" "username" {
+  length = 16
+  special = false
+}
+
+resource "random_password" "password" {
+  length = 16
+  special = true
+  override_special = "_%@"
+}
+
 output "db_arn" {
   value = aws_db_instance.db.arn
 }
@@ -89,4 +100,13 @@ output "db_address" {
 
 output "db_port" {
   value = aws_db_instance.db.port
+}
+
+output "db_username" {
+  value = aws_db_instance.db.username
+}
+
+output "db_password" {
+  value = aws_db_instance.db.password
+  sensitive = true
 }

@@ -20,7 +20,7 @@ variable "max_allocated_storage" {
 }
 
 variable "engine_version" {
-  default = "11.5"
+  default = "11.8"
 }
 
 variable "db_instance_class" {

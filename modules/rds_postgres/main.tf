@@ -41,6 +41,7 @@ resource "aws_db_instance" "db" {
   deletion_protection = true
   storage_encrypted = false
   skip_final_snapshot = false
+  auto_minor_version_upgrade = false
   final_snapshot_identifier = "${var.db_identifier}-SNAPSHOT"
   vpc_security_group_ids = [
     aws_security_group.db.id

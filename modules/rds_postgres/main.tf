@@ -38,7 +38,7 @@ resource "aws_db_instance" "db" {
   username = random_password.username.result
   password = random_password.password.result
   backup_retention_period = var.backup_retention_period
-  deletion_protection = true
+  deletion_protection = false
   storage_encrypted = false
   skip_final_snapshot = false
   auto_minor_version_upgrade = false

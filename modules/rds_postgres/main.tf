@@ -9,7 +9,6 @@ resource "aws_security_group" "db" {
     protocol = "tcp"
     security_groups = var.inbound_security_groups
   }
-
   egress {
     from_port = 0
     to_port = 0
@@ -17,7 +16,6 @@ resource "aws_security_group" "db" {
     cidr_blocks = [
       "0.0.0.0/0"]
   }
-
 }
 
 resource "aws_db_subnet_group" "db" {
@@ -40,8 +38,8 @@ resource "aws_db_instance" "db" {
   backup_retention_period = var.backup_retention_period
   deletion_protection = false
   storage_encrypted = false
-  skip_final_snapshot = false
   auto_minor_version_upgrade = false
+  skip_final_snapshot = true
   final_snapshot_identifier = "${var.db_identifier}-SNAPSHOT"
   vpc_security_group_ids = [
     aws_security_group.db.id
@@ -49,10 +47,6 @@ resource "aws_db_instance" "db" {
   db_subnet_group_name = aws_db_subnet_group.db.name
   multi_az = false
   delete_automated_backups = true
-
-  tags = {
-    BACKUP_ENABLED = "true"
-  }
 }
 
 resource "random_password" "username" {

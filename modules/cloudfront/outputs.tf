@@ -3,7 +3,7 @@ output "cloudfront_url" {
 }
 
 output "url" {
-  value = "https://${local.sub_domain}"
+  value = "https://${local.domain}"
 }
 
 output "distribution_id" {

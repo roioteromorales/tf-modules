@@ -1,7 +1,7 @@
 locals {
-  s3_origin_id = var.subdomain
-  bucket_name = "${var.subdomain}.${var.domain_name}-${data.aws_caller_identity.current.account_id}"
-  sub_domain = "${var.subdomain}.${var.domain_name}"
+  s3_origin_id = var.domain_name
+  bucket_name = "${var.domain_name}-${data.aws_caller_identity.current.account_id}"
+  domain = var.domain_name
 }
 
 data "aws_caller_identity" "current" {}
@@ -55,7 +55,7 @@ data "aws_iam_policy_document" "main" {
 }
 
 resource "aws_cloudfront_origin_access_identity" "main" {
-  comment = var.subdomain
+  comment = local.domain
 }
 
 resource "aws_cloudfront_distribution" "main" {
@@ -72,7 +72,7 @@ resource "aws_cloudfront_distribution" "main" {
 
   # If using route53 aliases for DNS we need to declare it here too, otherwise we'll get 403s.
   aliases = [
-    local.sub_domain]
+    local.domain]
 
   origin {
     domain_name = aws_s3_bucket.main.bucket_regional_domain_name
@@ -135,7 +135,7 @@ resource "aws_route53_record" "main" {
     aws_cloudfront_distribution.main
   ]
   zone_id = data.aws_route53_zone.selected.zone_id
-  name = local.sub_domain
+  name = local.domain
   type = "A"
   alias {
     name = aws_cloudfront_distribution.main.domain_name

@@ -106,22 +106,7 @@ EOF
 
 resource "aws_iam_policy" "main" {
   name = var.service_name
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Resource": "*",
-      "Action": [
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-      ]
-    }
-  ]
-}
-EOF
+  policy = var.aws_iam_policy
 }
 
 resource "aws_security_group" "main" {

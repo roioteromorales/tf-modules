@@ -39,7 +39,7 @@ variable "environment_variables" {
   default = "[]"
 }
 
-variable "aws_iam_role" {
+variable "aws_iam_policy" {
   description = "Service's policy"
   default = <<EOF
 {

@@ -12,7 +12,7 @@ locals {
 [
   {
     "name": "${var.service_name}",
-    "image": "${var.repository_name}:${var.repository_version}@${data.aws_ecr_image.ecr_image.image_digest}",
+    "image": "${var.repository_image}:${var.repository_version}@${data.aws_ecr_image.ecr_image.image_digest}",
     "environment": ${var.environment_variables},
     "logConfiguration": {
         "logDriver": "awslogs",
@@ -153,38 +153,9 @@ resource "aws_lb_target_group" "main" {
   }
 }
 
-resource "aws_lb_listener" "main" {
-  load_balancer_arn = var.lb_arn
-  port = "443"
-  protocol = "HTTPS"
-  ssl_policy = "ELBSecurityPolicy-2016-08"
-  certificate_arn = var.acm_certificate_arn
-
-  default_action {
-    type = "forward"
-    target_group_arn = aws_lb_target_group.main.arn
-  }
-}
-
-resource "aws_lb_listener" "redirect_http_to_https" {
-  load_balancer_arn = var.lb_arn
-  port = "80"
-  protocol = "HTTP"
-
-  default_action {
-    type = "redirect"
-
-    redirect {
-      port = "443"
-      protocol = "HTTPS"
-      status_code = "HTTP_301"
-    }
-  }
-}
-
 resource "aws_lb_listener_rule" "main" {
-  listener_arn = aws_lb_listener.main.arn
-  priority = 100
+  listener_arn = var.lb_listener_arn
+  priority = var.lb_listener_rule_priority
 
   action {
     type = "forward"
@@ -194,32 +165,9 @@ resource "aws_lb_listener_rule" "main" {
   condition {
     path_pattern {
       values = [
-        var.lb_path
+        "${var.lb_path}/*"
       ]
     }
   }
 
-}
-
-resource "aws_lb_listener_rule" "redirect_http_to_https" {
-  listener_arn = aws_lb_listener.redirect_http_to_https.arn
-
-  action {
-    type = "redirect"
-
-    redirect {
-      port = "443"
-      protocol = "HTTPS"
-      status_code = "HTTP_301"
-    }
-  }
-
-  condition {
-    http_header {
-      http_header_name = "X-Forwarded-For"
-      values = [
-        var.lb_path
-      ]
-    }
-  }
 }

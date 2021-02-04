@@ -4,12 +4,17 @@ variable "cluster_id" {}
 variable "service_name" {}
 variable "region" {}
 variable "repository_name" {}
+variable "repository_image" {}
 variable "repository_version" {
   default = "latest"
 }
 variable "ecs_execution_role_arn" {}
 variable "lb_arn" {}
 variable "lb_path" {}
+variable "lb_listener_arn" {}
+variable "lb_listener_rule_priority" {
+  default = 100
+}
 variable "acm_certificate_arn" {}
 variable "health_check_url_path" {}
 
